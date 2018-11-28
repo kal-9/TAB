@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+	<title>TAB</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+	<style>
+	    
+	    
+	    table { position:relative; width:67%; margin:auto }
+	    th.active { color:navy; border-bottom:1px solid navy }
+	    th, tr { font-family: arial, sans-serif }
+	    tr:nth-child(odd) { background-color:#f1f1f1 }
+	    input, #addButton { width:95% }
+	    input { font-size:large }
+	    
+
+
+	</style>
+    </head>
+
+    <body>
+
+	<div id="app">
+
+	    <table border="0px" cellpadding="8px">
+		<tr style="background-color:white">
+		    <th align="right" v-on:click="sortByName" v-bind:class="{active: nameOrder}">name</th>
+		    <th align="left" v-on:click="sortByStreet" v-bind:class="{active: streetOrder}">address</th>
+		</tr>
+
+		<tr v-for="(d,i) in details">
+		    <td align="right" v-on:click="editDetail(i)">{{d.name}}</td>
+		    <td align="left" v-on:click="editDetail(i)">{{d.number}} {{d.street}}</td>
+		    <td align="center"><button v-on:click="delDetail(i)">&#9746;</button></td>
+		</tr>
+
+		<tr><td colspan="3" style="background-color:white">&nbsp;</td></tr>
+		
+		<tr align="center" style="background-color:white">
+		    <td colspan="2"><input v-model="newEntry" placeholder="name  no.  street" /></td>
+		    <td><button id="addButton" v-on:click="addDetail">Add</button></td>
+		</tr>
+
+	    </table>
+
+
+	</div>
+
+
+
+
+
+    <script>
+
+
+	//create title
+	//host on github
+	//test on empty 
+	//test on chrome
+	//test on mobile
+	//audit html
+	
+	// ----------------------------------
+	//re-sort after add
+	//styling - design on paper
+	//styling - implementation
+	//centre table
+	//edit row (`Add` delDetails old row and adds new one, perhaps change label  of button)
+	//delDetail row
+	//delDetail needs to update store
+	//create table  name / address
+	//click to delDetail
+	//bin icon
+	//sort table by name or address
+	//click to sort by name or address
+	//add row to table
+	//get table to generate from data
+
+	   
+	function newStore()
+	{
+	    if (!localStorage.getItem("list"))
+		localStorage.setItem("list", "[]");
+
+	    function get() { return JSON.parse(localStorage.getItem("list")) }
+	    function update(newList) { localStorage.setItem("list", JSON.stringify(newList)) }
+
+	    return { get, update };
+	}
+
+	var store = newStore();
+
+
+
+	var details = store.get();
+	
+
+	//details[0] = {name:"bob", number:"42", street:"Anglesey Road"};
+	//details[1] = {name:"jim", number:"19", street:"Wibbly Way"};
+	//details[2] = {name:"jack", number:"78", street:"Loopback Lane"};
+	//details[3] = {name:"trevor", number:"33", street:"Arkwright Avenue"};
+
+	function printDetail(detail)
+	{
+	    return `${detail.name} ${detail.number} ${detail.street}`;
+	}
+
+	function editDetail(index)
+	{
+	    this.newEntry = printDetail(details[index]);
+	    delDetail(index);
+	}
+	
+	function delDetail(index)
+	{
+	    details.splice(index, 1);
+	    store.update(details);
+	}
+
+
+	function addDetail()
+	{
+	    if (!this.newEntry) return;
+
+
+	    const [name, number, ...street] = this.newEntry.trim().split(/\s+/); //trim and then split on any sequence of whitespace
+
+	    details.push({ name, number, 'street':street.join(" ") });
+
+
+	    this.reOrder();
+	    store.update(details);
+
+	    this.newEntry = "";
+	}
+
+	function byStreet(a,b)
+	    { return a.street.localeCompare(b.street) }
+
+	function byName(a,b)
+	    { return a.name.localeCompare(b.name) }
+
+
+	
+	function reOrder()
+	{
+	    if (this.nameOrder) details.sort(byName);
+	    if (this.streetOrder) details.sort(byStreet);
+	}
+
+
+	function sortByName() 
+	    { this.nameOrder = true; this.streetOrder = false; this.reOrder(); }
+	function sortByStreet() 
+	    { this.nameOrder = false; this.streetOrder = true; this.reOrder(); }
+
+
+	var app = new Vue({
+
+	    el: '#app',
+	    data: { details, newEntry:"", nameOrder:false, streetOrder:false },
+	    methods: { addDetail, editDetail, delDetail, sortByName, sortByStreet, reOrder }
+
+	});
+
+	app.sortByStreet();
+
+
+
+    </script>
+    </body>
+
+</html>
