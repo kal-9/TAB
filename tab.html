@@ -29,6 +29,7 @@
 		<tr style="background-color:white">
 		    <th align="right" v-on:click="sortByName" v-bind:class="{active: nameOrder}">name</th>
 		    <th align="left" v-on:click="sortByStreet" v-bind:class="{active: streetOrder}">address</th>
+		    <th></th>
 		</tr>
 
 		<tr v-for="(d,i) in details">
