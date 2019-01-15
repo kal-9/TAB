@@ -4,7 +4,7 @@ function onInstall(event)
 {
 
     function fillCache(cache)
-	return cache.addAll(['./', 'vue.js']);
+	{ return cache.addAll(['./', 'vue.js']) }
 
 
     event.waitUntil(caches.open('v1-tab-sw').then(fillCache));
@@ -13,7 +13,7 @@ function onInstall(event)
 function onFetch(event)
 {
     function onMatch(response)
-	return response || fetch(event.request);
+	{ return response || fetch(event.request) }
 
     event.respondWith(caches.match(event.request).then(onMatch));
 }
