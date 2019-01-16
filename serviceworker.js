@@ -14,6 +14,7 @@ function onInstall(event)
 function onFetch(event)
 {
 
+    /*
     function log(response)
     {
 	console.log("cache match !");
@@ -22,6 +23,7 @@ function onFetch(event)
 	console.log("response : ");
 	console.log(response);
     }
+    */
 
     function onMatch(response)
     { 
@@ -29,7 +31,19 @@ function onFetch(event)
 	return response || fetch(event.request) 
     }
 
-    event.respondWith(caches.match(event.request).then(onMatch));
+    function log(error)
+	console.log("Network Down, returning offline version ...");
+
+    function onNetworkLost(error)
+    {
+	log(error);
+	return caches.match(event.request);
+    }
+
+
+    event.respondWith(fetch(event.request)).catch(onNetworkLost);
+
+    //event.respondWith(caches.match(event.request).then(onMatch));
 }
 
 self.addEventListener('install', onInstall);
