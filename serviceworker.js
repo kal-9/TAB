@@ -47,4 +47,9 @@ self.addEventListener('install', onInstall);
 self.addEventListener('fetch', onFetch);
 
 
+// USEFUL LINKS
 
+//https://github.com/jakearchibald/simple-serviceworker-tutorial
+//https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
+//https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+//https://googlechrome.github.io/samples/service-worker/custom-offline-page/index.html
