@@ -12,14 +12,19 @@ function onInstall(event)
 
 function onFetch(event)
 {
-    function onMatch(response)
-    { 
+
+    function log(response)
+    {
 	console.log("cache match !");
 	console.log("event.request");
 	console.log(event.request);
 	console.log("response : ");
 	console.log(response);
+    }
 
+    function onMatch(response)
+    { 
+	//log(response);
 	return response || fetch(event.request) 
     }
 
