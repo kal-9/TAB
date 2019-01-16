@@ -4,7 +4,7 @@ function onInstall(event)
 {
 
     function fillCache(cache)
-	{ return cache.addAll(['./', 'vue.js']) }
+	{ return cache.addAll(['./tab.html', 'vue.js']) }
 
 
     event.waitUntil(caches.open('v1-tab-sw').then(fillCache));
