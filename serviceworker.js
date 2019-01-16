@@ -41,7 +41,7 @@ function onFetch(event)
     }
 
 
-    event.respondWith(fetch(event.request)).catch(onNetworkLost);
+    event.respondWith(fetch(event.request).catch(onNetworkLost));
 
     //event.respondWith(caches.match(event.request).then(onMatch));
 }
