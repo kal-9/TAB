@@ -32,7 +32,7 @@ function onFetch(event)
     }
 
     function log(error)
-	console.log("Network Down, returning offline version ...");
+	{ console.log("Network Down, returning offline version ...") }
 
     function onNetworkLost(error)
     {
