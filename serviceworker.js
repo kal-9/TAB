@@ -13,15 +13,15 @@ function onInstall(event)
 function onFetch(event)
 {
     function onMatch(response)
-	{ 
-		console.log("cache match !");
-		console.log("event.requeest");
-		console.log("event.request");
-		console.log("response : ");
-		console.log(response);
+    { 
+	console.log("cache match !");
+	console.log("event.request");
+	console.log(event.request);
+	console.log("response : ");
+	console.log(response);
 
-		return response || fetch(event.request) 
-	}
+	return response || fetch(event.request) 
+    }
 
     event.respondWith(caches.match(event.request).then(onMatch));
 }
