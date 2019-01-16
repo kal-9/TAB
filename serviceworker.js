@@ -1,6 +1,9 @@
 
 const TABCACHE = 'v1-tab-sw';
 
+function log(msg)
+    { console.log(msg) }
+
 function onInstall(event)
 {
 
@@ -14,39 +17,23 @@ function onInstall(event)
 
 function onFetch(event)
 {
-
-    /*
-    function log(response)
-    {
-	console.log("cache match !");
-	console.log("event.request");
-	console.log(event.request);
-	console.log("response : ");
-	console.log(response);
-    }
-    */
-
-    function onMatch(response)
-    { 
-	//log(response);
-	return response || fetch(event.request) 
-    }
-
-    function log(error)
-	{ console.log("Network Down, returning offline version ...") }
-
     function onError(error)
     {
-	log(error);
+	log("Network Down - returning offline version ...");
 	return caches.match(event.request);
     }
 
     function onSuccess(response)
     {
-	console.log("Network Up! - updating cache");
+	log("Network Up!");
 
 	function updateCache(cache)
-	    { cache.put(event.request, response.clone()); return response; } //see MDN/Using_Service_Workers
+	{ 
+	    log("Updating cache ...");
+
+	    cache.put(event.request, response.clone()); //see MDN/Using_Service_Workers
+	    return response; 
+	} 
 	
 	return caches.open(TABCACHE).then(updateCache);
     }
@@ -54,7 +41,6 @@ function onFetch(event)
 
     event.respondWith(fetch(event.request).then(onSuccess).catch(onError));
 
-    //event.respondWith(caches.match(event.request).then(onMatch));
 }
 
 self.addEventListener('install', onInstall);
