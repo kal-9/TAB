@@ -1,4 +1,5 @@
 
+const TABCACHE = 'v1-tab-sw';
 
 function onInstall(event)
 {
@@ -8,7 +9,7 @@ function onInstall(event)
 
 
     self.skipWaiting();
-    event.waitUntil(caches.open('v1-tab-sw').then(fillCache));
+    event.waitUntil(caches.open(TABCACHE).then(fillCache));
 }
 
 function onFetch(event)
@@ -34,14 +35,24 @@ function onFetch(event)
     function log(error)
 	{ console.log("Network Down, returning offline version ...") }
 
-    function onNetworkLost(error)
+    function onError(error)
     {
 	log(error);
 	return caches.match(event.request);
     }
 
+    function onSuccess(response)
+    {
+	console.log("Network Up! - updating cache");
 
-    event.respondWith(fetch(event.request).catch(onNetworkLost));
+	function updateCache(cache)
+	    { cache.put(event.request, response.clone()); return response; } //see MDN/Using_Service_Workers
+	
+	return caches.open(TABCACHE).then(updateCache);
+    }
+
+
+    event.respondWith(fetch(event.request).then(onSuccess).catch(onError));
 
     //event.respondWith(caches.match(event.request).then(onMatch));
 }
